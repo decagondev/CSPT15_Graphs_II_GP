@@ -84,8 +84,50 @@ class Graph:
                     visited.add(next_vert)
                     to_visit.enqueue(next_vert)
 
+    def breadth_first_search_p(self, starting_vert, target):
+        to_visit = Queue()
+        visited = set()
+        to_visit.enqueue([starting_vert])
+        visited.add(starting_vert)
+        while to_visit.size() > 0:
+            # dequeue the current path
+            path = to_visit.dequeue()
+
+            # extract the last vert from the path
+            vert = path[-1]
+
+            # is this vertex our target?
+            if vert == target:
+                return path
+            # add the vert to visited
+            visited.add(vert)
+            for next_vert in vert.get_connections():
+                if next_vert not in visited:
+                    # create a copy of the path
+                    path_copy = list(path)
+
+                    # append the next vert to the copy of the path
+                    path_copy.append(next_vert)
+
+                    # enqueue our copy of the path
+                    to_visit.enqueue(path_copy)
+            
+            return None # you could also just return an empty list
+
     def depth_first_search(self, vertex, visited = set()):
         visited.add(vertex)
         for next_vert in vertex.get_connections():
             if next_vert not in visited:
                 self.depth_first_search(next_vert, visited)
+
+    def dfs_i(self, starting_vert):
+        to_visit = Stack()
+        visited = set()
+        to_visit.push(starting_vert)
+        visited.add(starting_vert)
+        while to_visit.size() > 0:
+            current_vert = to_visit.pop()
+            for next_vert in current_vert.get_connections():
+                if next_vert not in visited:
+                    visited.add(next_vert)
+                    to_visit.push(next_vert)
